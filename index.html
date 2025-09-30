@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARMFFSOFT KEY GENERATOR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .header {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0,255,255,0.3);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(45deg, #ff00cc, #3333ff);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255,0,204,0.5);
+        }
+        
+        .generate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255,0,204,0.8);
+        }
+        
+        .key-display {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            display: none;
+            box-shadow: 0 0 20px rgba(0,255,0,0.3);
+        }
+        
+        .key-text {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #00ff00;
+            letter-spacing: 2px;
+            margin: 15px 0;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔑 ARMFFSOFT</h1>
+            <div class="subtitle">PREMIUM KEY GENERATOR</div>
+        </div>
+        
+        <button class="generate-btn" onclick="generateKey()">🎯 CREATE KEY</button>
+        
+        <div id="keyDisplay" class="key-display">
+            <div>🎉 ВАШ КЛЮЧ УСПЕШНО СГЕНЕРИРОВАН!</div>
+            <div class="key-text" id="keyValue">ARMFF-XXXX-XXXX-XXXX</div>
+            <div>⚠️ Сохраните этот ключ в безопасном месте</div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">✅ 30 дней доступа</div>
+            <div class="feature">💻 1 устройство</div>
+            <div class="feature">🆘 Поддержка 24/7</div>
+            <div class="feature">🚀 Премиум функции</div>
+        </div>
+        
+        <div class="footer">
+            © 2024 ARMFFSOFT STUDIO | @armffsoft_support
+        </div>
+    </div>
+
+    <script>
+        function generateKey() {
+            const timestamp = Date.now().toString().slice(-6);
+            const random = Math.random().toString(36).substr(2, 6).toUpperCase();
+            const key = `ARMFF-${timestamp}-${random}-PREMIUM`;
+            
+            document.getElementById('keyValue').textContent = key;
+            document.getElementById('keyDisplay').style.display = 'block';
+            
+            // Создаем файл для скачивания
+            const content = `ARMFFSOFT KEY GENERATOR\n\nВАШ КЛЮЧ: ${key}\n\nСгенерирован: ${new Date().toLocaleString()}\nПоддержка: @armffsoft_support`;
+            const blob = new Blob([content], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ARMFFSOFT_KEY.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
