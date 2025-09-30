@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARMFFSOFT KEY GENERATOR</title>
+    <title>ARMFFSOFT</title>
     <style>
         * {
             margin: 0;
@@ -40,25 +40,24 @@
             text-shadow: 0 0 10px #00ffff;
         }
         
-        .user-form {
-            background: rgba(255,255,255,0.05);
-            padding: 20px;
+        .password-display {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #00ff00;
             border-radius: 10px;
-            margin: 20px 0;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 0 20px rgba(0,255,0,0.3);
         }
         
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid #00ffff;
+        .password-text {
+            font-size: 3em;
+            font-weight: bold;
+            color: #00ff00;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px #00ff00;
         }
         
-        .generate-btn {
+        .copy-btn {
             background: linear-gradient(45deg, #ff00cc, #3333ff);
             border: none;
             padding: 15px 40px;
@@ -71,146 +70,41 @@
             box-shadow: 0 0 15px rgba(255,0,204,0.5);
         }
         
-        .generate-btn:hover {
+        .copy-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(255,0,204,0.8);
-        }
-        
-        .key-display {
-            background: rgba(0,0,0,0.5);
-            border: 2px solid #00ff00;
-            border-radius: 10px;
-            padding: 25px;
-            margin: 20px 0;
-            display: none;
-            box-shadow: 0 0 20px rgba(0,255,0,0.3);
-        }
-        
-        .key-text {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #00ff00;
-            letter-spacing: 2px;
-            margin: 15px 0;
-        }
-        
-        .user-info {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔑 ARMFFSOFT</h1>
-            <div class="subtitle">PERSONAL KEY GENERATOR</div>
+            <h1>🔑 𝗔𝗥𝗠𝗙𝗙𝗦𝗢𝗙𝗧 𝗢𝗙𝗙𝗜𝗖𝗜𝗔𝗟</h1>
+            <div class="subtitle">OFFICIAL PASSWORD</div>
         </div>
         
-        <div class="user-form">
-            <input type="text" id="userName" class="form-input" placeholder="Введите ваше имя" required>
-            <input type="email" id="userEmail" class="form-input" placeholder="Введите ваш email" required>
-            <input type="text" id="userTelegram" class="form-input" placeholder="Ваш Telegram @username">
+        <div class="password-display">
+            <div class="password-text">ARMFFSOFT</div>
         </div>
         
-        <button class="generate-btn" onclick="generatePersonalKey()">🎯 CREATE PERSONAL KEY</button>
-        
-        <div id="keyDisplay" class="key-display">
-            <div class="user-info">
-                <div>👤 Пользователь: <span id="displayName"></span></div>
-                <div>📧 Email: <span id="displayEmail"></span></div>
-                <div>📱 Telegram: <span id="displayTelegram"></span></div>
-            </div>
-            <div class="key-text" id="keyValue">ARMFFSOFT</div>
-            <div>⏰ Срок действия: 30 дней с момента активации</div>
-        </div>
+        <button class="copy-btn" onclick="copyPassword()">📋 КОПИРОВАТЬ ПАРОЛЬ</button>
     </div>
 
     <script>
-        function generatePersonalKey() {
-            const userName = document.getElementById('userName').value;
-            const userEmail = document.getElementById('userEmail').value;
-            const userTelegram = document.getElementById('userTelegram').value;
-            
-            if (!userName || !userEmail) {
-                alert('Пожалуйста, заполните имя и email!');
-                return;
-            }
-            
-            // Генерируем уникальный ключ на основе данных пользователя
-            const userHash = btoa(userName + userEmail).slice(0, 8).toUpperCase();
-            const timestamp = Date.now().toString().slice(-6);
-            const random = Math.random().toString(36).substr(2, 4).toUpperCase();
-            
-            const personalKey = `ARMFF-${userHash}-${timestamp}-${random}`;
-            
-            // Показываем информацию пользователя
-            document.getElementById('displayName').textContent = userName;
-            document.getElementById('displayEmail').textContent = userEmail;
-            document.getElementById('displayTelegram').textContent = userTelegram || 'Не указан';
-            document.getElementById('keyValue').textContent = personalKey;
-            document.getElementById('keyDisplay').style.display = 'block';
-            
-            // Создаем персонализированный файл для скачивания
-            const keyData = {
-                user: userName,
-                email: userEmail,
-                telegram: userTelegram,
-                key: personalKey,
-                generated: new Date().toLocaleString(),
-                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleString()
-            };
-            
-            const content = `ARMFFSOFT PERSONAL KEY GENERATOR
-╔══════════════════════════════════════════╗
-║           ПЕРСОНАЛЬНЫЙ КЛЮЧ              ║
-╚══════════════════════════════════════════╝
-
-👤 ПОЛЬЗОВАТЕЛЬ: ${keyData.user}
-📧 EMAIL: ${keyData.email}
-📱 TELEGRAM: ${keyData.telegram}
-
-🔑 ВАШ КЛЮЧ: ${keyData.key}
-
-📅 Сгенерирован: ${keyData.generated}
-⏰ Действует до: ${keyData.expires}
-
-⚡ ЛИЦЕНЗИЯ:
-• 30 дней премиум доступа
-• 1 устройство
-• Приоритетная поддержка
-
-🆘 Поддержка: @armffsoft_support
-🌐 Сайт: armffsoft.com
-
-⚠️ НЕ РАСПРОСТРАНЯЙТЕ ЭТОТ ФАЙЛ!`;
-
-            const blob = new Blob([content], {type: 'text/plain'});
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `ARMFFSOFT_KEY_${userName}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            // Сохраняем в LocalStorage (опционально)
-            const userKeys = JSON.parse(localStorage.getItem('armffsoft_keys') || '[]');
-            userKeys.push(keyData);
-            localStorage.setItem('armffsoft_keys', JSON.stringify(userKeys));
+        function copyPassword() {
+            navigator.clipboard.writeText("ARMFFSOFT")
+                .then(() => {
+                    alert('Пароль "ARMFFSOFT" скопирован в буфер обмена!');
+                })
+                .catch(err => {
+                    console.error('Ошибка копирования: ', err);
+                });
         }
         
-        // Показываем историю ключей если есть
-        window.addEventListener('load', function() {
-            const userKeys = JSON.parse(localStorage.getItem('armffsoft_keys') || '[]');
-            if (userKeys.length > 0) {
-                console.log('Ранее сгенерированные ключи:', userKeys);
-            }
-        });
+        // Автоматически копируем при загрузке страницы
+        window.onload = function() {
+            copyPassword();
+        }
     </script>
 </body>
-</html>            
+</html>
