@@ -87,12 +87,11 @@
         }
         
         .key-text {
-            font-size: 1.3em;
+            font-size: 1.4em;
             font-weight: bold;
             color: #00ff00;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             margin: 15px 0;
-            word-break: break-all;
         }
         
         .user-info {
@@ -101,34 +100,13 @@
             border-radius: 10px;
             margin: 15px 0;
         }
-        
-        .admin-info {
-            background: rgba(255,0,0,0.1);
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            font-size: 0.9em;
-            border: 1px solid #ff0000;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔑 ARMFFSOFT VIP KEY</h1>
-            <div class="subtitle">OFFICIAL KEY GENERATOR</div>
-        </div>
-        
-        <!-- АДМИНСКАЯ ИНФОРМАЦИЯ - МЕНЯЙ ЗДЕСЬ -->
-        <div class="admin-info">
-            ⚙️ Текущие настройки: 1 день 1 час 1 минута 1 секунда
-            <!-- 
-            ЧТОБЫ ИЗМЕНИТЬ СРОК - ПРОСТО ОТРЕДАКТИРУЙ ЦИФРЫ НИЖЕ:
-            days: 1    - дни
-            hours: 1   - часы  
-            minutes: 1 - минуты
-            seconds: 1 - секунды
-            -->
+            <h1>🔑 ARMFFSOFT</h1>
+            <div class="subtitle">PERSONAL KEY GENERATOR</div>
         </div>
         
         <div class="user-form">
@@ -137,29 +115,20 @@
             <input type="text" id="userTelegram" class="form-input" placeholder="Ваш Telegram @username">
         </div>
         
-        <button class="generate-btn" onclick="generatePersonalKey()">🎯 CREATE OFFICIAL KEY</button>
+        <button class="generate-btn" onclick="generatePersonalKey()">🎯 CREATE PERSONAL KEY</button>
         
         <div id="keyDisplay" class="key-display">
             <div class="user-info">
                 <div>👤 Пользователь: <span id="displayName"></span></div>
                 <div>📧 Email: <span id="displayEmail"></span></div>
                 <div>📱 Telegram: <span id="displayTelegram"></span></div>
-                <div>⏰ Срок действия: <span id="displayDuration"></span></div>
             </div>
-            <div class="key-text" id="keyValue">ARMFFSOFT OFFICIAL-XXXX-XXXX-XXXX</div>
+            <div class="key-text" id="keyValue">ARMFF-XXXX-XXXX-XXXX</div>
+            <div>⏰ Срок действия: 30 дней с момента активации</div>
         </div>
     </div>
 
     <script>
-        // ==== АДМИНСКИЕ НАСТРОЙКИ - МЕНЯЙ ЗДЕСЬ ====
-        const ADMIN_SETTINGS = {
-            days: 1,        // Дни (меняй эту цифру)
-            hours: 1,       // Часы (меняй эту цифру)  
-            minutes: 1,     // Минуты (меняй эту цифру)
-            seconds: 1      // Секунды (меняй эту цифру)
-        };
-        // ==== КОНЕЦ АДМИНСКИХ НАСТРОЕК ====
-
         function generatePersonalKey() {
             const userName = document.getElementById('userName').value;
             const userEmail = document.getElementById('userEmail').value;
@@ -170,91 +139,78 @@
                 return;
             }
             
-            // Рассчитываем дату истечения на основе админских настроек
-            const now = new Date();
-            const expirationDate = new Date();
-            expirationDate.setDate(now.getDate() + ADMIN_SETTINGS.days);
-            expirationDate.setHours(now.getHours() + ADMIN_SETTINGS.hours);
-            expirationDate.setMinutes(now.getMinutes() + ADMIN_SETTINGS.minutes);
-            expirationDate.setSeconds(now.getSeconds() + ADMIN_SETTINGS.seconds);
+            // Генерируем уникальный ключ на основе данных пользователя
+            const userHash = btoa(userName + userEmail).slice(0, 8).toUpperCase();
+            const timestamp = Date.now().toString().slice(-6);
+            const random = Math.random().toString(36).substr(2, 4).toUpperCase();
             
-            // Форматируем текст срока
-            const durationText = formatDuration(ADMIN_SETTINGS);
+            const personalKey = `ARMFF-${userHash}-${timestamp}-${random}`;
             
-            // Генерируем ключ
-            const part1 = Math.random().toString(36).substr(2, 4).toUpperCase();
-            const part2 = Math.random().toString(36).substr(2, 4).toUpperCase();
-            const part3 = Math.random().toString(36).substr(2, 4).toUpperCase();
-            const officialKey = `ARMFFSOFT OFFICIAL-${part1}-${part2}-${part3}`;
-            
-            // Показываем информацию
+            // Показываем информацию пользователя
             document.getElementById('displayName').textContent = userName;
             document.getElementById('displayEmail').textContent = userEmail;
             document.getElementById('displayTelegram').textContent = userTelegram || 'Не указан';
-            document.getElementById('displayDuration').textContent = durationText;
-            document.getElementById('keyValue').textContent = officialKey;
+            document.getElementById('keyValue').textContent = personalKey;
             document.getElementById('keyDisplay').style.display = 'block';
             
-            // Создаем файл для скачивания
-            createKeyFile(userName, userEmail, userTelegram, officialKey, durationText, expirationDate);
-        }
-        
-        function formatDuration(settings) {
-            let parts = [];
-            if (settings.days > 0) parts.push(settings.days + ' ' + getRussianWord(settings.days, ['день', 'дня', 'дней']));
-            if (settings.hours > 0) parts.push(settings.hours + ' ' + getRussianWord(settings.hours, ['час', 'часа', 'часов']));
-            if (settings.minutes > 0) parts.push(settings.minutes + ' ' + getRussianWord(settings.minutes, ['минута', 'минуты', 'минут']));
-            if (settings.seconds > 0) parts.push(settings.seconds + ' ' + getRussianWord(settings.seconds, ['секунда', 'секунды', 'секунд']));
-            return parts.join(' ');
-        }
-        
-        function getRussianWord(number, words) {
-            const cases = [2, 0, 1, 1, 1, 2];
-            return words[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[Math.min(number % 10, 5)]];
-        }
-        
-        function createKeyFile(userName, userEmail, userTelegram, key, duration, expires) {
-            const content = `╔══════════════════════════════════════════╗
-║           ARMFFSOFT STUDIO              ║
-║           OFFICIAL LICENSE KEY          ║
+            // Создаем персонализированный файл для скачивания
+            const keyData = {
+                user: userName,
+                email: userEmail,
+                telegram: userTelegram,
+                key: personalKey,
+                generated: new Date().toLocaleString(),
+                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleString()
+            };
+            
+            const content = `ARMFFSOFT PERSONAL KEY GENERATOR
+╔══════════════════════════════════════════╗
+║           ПЕРСОНАЛЬНЫЙ КЛЮЧ              ║
 ╚══════════════════════════════════════════╝
 
-👤 ЛИЦЕНЗИАР: ${userName}
-📧 EMAIL: ${userEmail}
-📱 TELEGRAM: ${userTelegram || 'Не указан'}
+👤 ПОЛЬЗОВАТЕЛЬ: ${keyData.user}
+📧 EMAIL: ${keyData.email}
+📱 TELEGRAM: ${keyData.telegram}
 
-🔑 ОФИЦИАЛЬНЫЙ КЛЮЧ:
-   ${key}
+🔑 ВАШ КЛЮЧ: ${keyData.key}
 
-📅 Дата генерации: ${new Date().toLocaleString()}
-⏰ Срок действия: ${duration}
-⏳ Действует до: ${expires.toLocaleString()}
+📅 Сгенерирован: ${keyData.generated}
+⏰ Действует до: ${keyData.expires}
 
-⚡ УСЛОВИЯ ЛИЦЕНЗИИ:
-• ${duration} премиум доступа
-• 1 устройство активации
-• Приоритетная техническая поддержка
+⚡ ЛИЦЕНЗИЯ:
+• 30 дней премиум доступа
+• 1 устройство
+• Приоритетная поддержка
 
-🆘 Техподдержка: @armffsoft_support
-🌐 Официальный сайт: armffsoft.com
+🆘 Поддержка: @armffsoft_support
+🌐 Сайт: armffsoft.com
 
-⚠️ ВАЖНО: Не распространяйте этот файл!`;
+⚠️ НЕ РАСПРОСТРАНЯЙТЕ ЭТОТ ФАЙЛ!`;
 
             const blob = new Blob([content], {type: 'text/plain'});
             const url = URL.createObjectURL(blob);
             
             const a = document.createElement('a');
             a.href = url;
-            a.download = `ARMFFSOFT_OFFICIAL_KEY_${userName}.txt`;
+            a.download = `ARMFFSOFT_KEY_${userName}.txt`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            
+            // Сохраняем в LocalStorage (опционально)
+            const userKeys = JSON.parse(localStorage.getItem('armffsoft_keys') || '[]');
+            userKeys.push(keyData);
+            localStorage.setItem('armffsoft_keys', JSON.stringify(userKeys));
         }
         
-        // Обновляем отображение текущих настроек
-        document.querySelector('.admin-info').textContent = 
-            `⚙️ Текущие настройки: ${formatDuration(ADMIN_SETTINGS)}`;
+        // Показываем историю ключей если есть
+        window.addEventListener('load', function() {
+            const userKeys = JSON.parse(localStorage.getItem('armffsoft_keys') || '[]');
+            if (userKeys.length > 0) {
+                console.log('Ранее сгенерированные ключи:', userKeys);
+            }
+        });
     </script>
 </body>
-</html>
+</html>            
