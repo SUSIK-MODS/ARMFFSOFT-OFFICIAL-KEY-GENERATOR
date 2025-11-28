@@ -18,7 +18,6 @@
         }
         .container { max-width: 1200px; margin: 0 auto; }
         
-        /* Header с твоим брендом */
         .brand-header { 
             background: rgba(255,255,255,0.1);
             padding: 40px;
@@ -35,10 +34,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 5px 15px rgba(231, 76, 60, 0.5);
-        }
-        .brand-subtitle {
-            font-size: 1.2em;
-            opacity: 0.9;
         }
         .domain-badge {
             display: inline-block;
@@ -73,7 +68,6 @@
         }
         
         .form-group { margin-bottom: 15px; }
-        .form-label { display: block; margin-bottom: 5px; font-weight: bold; }
         .form-input { 
             width: 100%; 
             padding: 12px 15px;
@@ -82,7 +76,6 @@
             background: rgba(255,255,255,0.1);
             color: white;
             border: 1px solid rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
         }
         .form-input:focus {
             outline: none;
@@ -116,7 +109,6 @@
             padding: 25px;
             margin: 20px 0;
             display: none;
-            animation: slideIn 0.5s ease;
         }
         
         .key-text {
@@ -125,7 +117,6 @@
             color: #27ae60;
             margin: 15px 0;
             font-family: 'Courier New', monospace;
-            text-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
         }
         
         .users-grid {
@@ -146,12 +137,6 @@
         .status-active { color: #27ae60; }
         .status-expired { color: #e74c3c; }
         
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Адаптивность */
         @media (max-width: 768px) {
             .dashboard { grid-template-columns: 1fr; }
             .brand-title { font-size: 2em; }
@@ -160,16 +145,13 @@
 </head>
 <body>
     <div class="container">
-        <!-- Брендированный хедер -->
         <header class="brand-header">
             <h1 class="brand-title">🔑 ARMFFSOFT KEYS</h1>
-            <p class="brand-subtitle">Официальная система управления лицензиями</p>
+            <p>Официальная система управления лицензиями</p>
             <div class="domain-badge">mypdftools.site</div>
         </header>
 
-        <!-- Основная панель -->
         <div class="dashboard">
-            <!-- Панель администратора -->
             <div class="panel">
                 <h3 class="panel-title">👑 Панель администратора</h3>
                 <div class="form-group">
@@ -200,7 +182,6 @@
                 </div>
             </div>
 
-            <!-- Панель проверки -->
             <div class="panel">
                 <h3 class="panel-title">🔍 Проверка лицензии</h3>
                 <div class="form-group">
@@ -211,16 +192,13 @@
             </div>
         </div>
 
-        <!-- Результат генерации -->
         <div id="keyResult" class="key-display">
             <h3>✅ Лицензия создана!</h3>
             <div class="key-text" id="generatedKey"></div>
             <div id="keyDetails"></div>
             <button class="btn" onclick="copyKey()">📋 Копировать ключ</button>
-            <button class="btn btn-secondary" onclick="shareKey()">📤 Поделиться</button>
         </div>
 
-        <!-- Список пользователей -->
         <div class="panel">
             <h3 class="panel-title">📊 Активные лицензии</h3>
             <div id="usersList" class="users-grid"></div>
@@ -228,30 +206,31 @@
     </div>
 
     <script>
-        // Firebase конфигурация для mypdftools.site
+        // ТВОЙ Firebase Config
         const firebaseConfig = {
-            // ЗАМЕНИ ЭТИ ДАННЫЕ НА СВОИ ИЗ FIREBASE
-            apiKey: "your_api_key_here",
-            authDomain: "your-project.firebaseapp.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "your_app_id_here"
+            apiKey: "AIzaSyAOPcJlGZs_K88PoS2G8PW8eir-kD_LzYE",
+            authDomain: "armffsoft-keys.firebaseapp.com",
+            projectId: "armffsoft-keys",
+            storageBucket: "armffsoft-keys.firebasestorage.app",
+            messagingSenderId: "577466829018",
+            appId: "1:577466829018:web:cda9e4d2f673204dcbfde3"
         };
 
-        // Инициализация
+        // Инициализация Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const ADMIN_PASSWORD = "armffsoft2024"; // Пароль админа
+        
+        // Пароль администратора (можешь поменять)
+        const ADMIN_PASSWORD = "armffsoft2024";
 
         function loginAdmin() {
             const password = document.getElementById('adminPassword').value;
             if (password === ADMIN_PASSWORD) {
                 document.getElementById('adminPanel').style.display = 'block';
                 loadUsers();
-                showNotification('Админ-панель активирована!', 'success');
+                alert('Админ-панель активирована!');
             } else {
-                showNotification('Неверный пароль!', 'error');
+                alert('Неверный пароль!');
             }
         }
 
@@ -262,10 +241,11 @@
             const days = parseInt(document.getElementById('daysValid').value);
 
             if (!name || !email) {
-                showNotification('Заполните имя и email!', 'error');
+                alert('Заполните имя и email!');
                 return;
             }
 
+            // Генерация уникального ключа
             const key = "ARMFFSOFT-" + 
                        Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
                        Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
@@ -275,6 +255,7 @@
             const expires = new Date();
             expires.setDate(expires.getDate() + days);
 
+            // Сохранение в базу
             db.collection("licenses").add({
                 name: name,
                 email: email,
@@ -282,8 +263,7 @@
                 key: key,
                 created: firebase.firestore.Timestamp.fromDate(created),
                 expires: firebase.firestore.Timestamp.fromDate(expires),
-                status: "active",
-                domain: "mypdftools.site"
+                status: "active"
             })
             .then(() => {
                 document.getElementById('generatedKey').textContent = key;
@@ -296,10 +276,10 @@
                 `;
                 document.getElementById('keyResult').style.display = 'block';
                 loadUsers();
-                showNotification('Лицензия создана!', 'success');
+                alert('Лицензия создана!');
             })
             .catch(error => {
-                showNotification('Ошибка: ' + error.message, 'error');
+                alert('Ошибка: ' + error.message);
             });
         }
 
@@ -381,35 +361,13 @@
         function copyKey() {
             const key = document.getElementById('generatedKey').textContent;
             navigator.clipboard.writeText(key).then(() => {
-                showNotification('Ключ скопирован в буфер!', 'success');
+                alert('Ключ скопирован в буфер!');
             });
-        }
-
-        function shareKey() {
-            const key = document.getElementById('generatedKey').textContent;
-            const details = document.getElementById('keyDetails').textContent;
-            const text = `🔑 Ваш лицензионный ключ ARMFFSOFT:\n\n${key}\n\n${details}\n\nАктивируйте на: mypdftools.site`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Лицензия ARMFFSOFT',
-                    text: text
-                });
-            } else {
-                navigator.clipboard.writeText(text).then(() => {
-                    showNotification('Данные для分享 скопированы!', 'success');
-                });
-            }
-        }
-
-        function showNotification(message, type) {
-            // Простое уведомление
-            alert(message);
         }
 
         // Автозагрузка при открытии
         document.addEventListener('DOMContentLoaded', function() {
-            showNotification('Добро пожаловать в ARMFFSOFT Key Manager!', 'info');
+            console.log('ARMFFSOFT Key Manager loaded');
         });
     </script>
 </body>
