@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARMFFSOFT - Лицензионные ключи | mypdftools.site</title>
-    <meta name="description" content="Официальная система лицензионных ключей ARMFFSOFT">
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -25,7 +25,6 @@
             margin-bottom: 30px;
             text-align: center;
             border: 2px solid #e74c3c;
-            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
         }
         .brand-title { 
             font-size: 3em; 
@@ -33,54 +32,21 @@
             background: linear-gradient(45deg, #e74c3c, #f39c12);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 5px 15px rgba(231, 76, 60, 0.5);
-        }
-        .domain-badge {
-            display: inline-block;
-            background: #e74c3c;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            margin-top: 10px;
         }
         
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .panel {
+        .auth-panel {
             background: rgba(255,255,255,0.08);
             padding: 25px;
             border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
-        
-        .panel-title {
-            font-size: 1.4em;
             margin-bottom: 20px;
-            color: #f39c12;
-            border-bottom: 2px solid #f39c12;
-            padding-bottom: 10px;
+            text-align: center;
         }
         
-        .form-group { margin-bottom: 15px; }
-        .form-input { 
-            width: 100%; 
-            padding: 12px 15px;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .form-input:focus {
-            outline: none;
-            border-color: #e74c3c;
-            box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+        .role-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
         }
         
         .btn {
@@ -92,54 +58,43 @@
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
-            margin: 5px;
         }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        .btn-vip {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
         }
-        .btn-secondary {
+        .btn-user {
             background: linear-gradient(45deg, #3498db, #2980b9);
         }
         
-        .key-display {
-            background: rgba(0,0,0,0.3);
-            border: 2px solid #27ae60;
+        .login-form {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
             border-radius: 10px;
-            padding: 25px;
-            margin: 20px 0;
+            margin: 15px 0;
             display: none;
         }
         
-        .key-text {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #27ae60;
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
+        .form-input { 
+            width: 100%; 
+            padding: 12px 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
         }
         
-        .users-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            max-height: 500px;
-            overflow-y: auto;
+        .user-panel, .admin-panel {
+            display: none;
         }
         
-        .user-card {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #e74c3c;
-        }
-        
-        .status-active { color: #27ae60; }
-        .status-expired { color: #e74c3c; }
-        
-        @media (max-width: 768px) {
-            .dashboard { grid-template-columns: 1fr; }
-            .brand-title { font-size: 2em; }
+        .vip-badge {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -151,62 +106,100 @@
             <div class="domain-badge">mypdftools.site</div>
         </header>
 
-        <div class="dashboard">
-            <div class="panel">
-                <h3 class="panel-title">👑 Панель администратора</h3>
-                <div class="form-group">
-                    <input type="password" id="adminPassword" class="form-input" placeholder="Пароль администратора">
-                </div>
-                <button class="btn" onclick="loginAdmin()">🔐 Войти в админку</button>
-                
-                <div id="adminPanel" style="display:none; margin-top: 20px;">
-                    <h4>Создать лицензию</h4>
-                    <div class="form-group">
-                        <input type="text" id="userName" class="form-input" placeholder="Имя клиента">
-                    </div>
-                    <div class="form-group">
-                        <input type="email" id="userEmail" class="form-input" placeholder="Email клиента">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="userTelegram" class="form-input" placeholder="Telegram (@username)">
-                    </div>
-                    <div class="form-group">
-                        <select id="daysValid" class="form-input">
-                            <option value="7">7 дней</option>
-                            <option value="30" selected>30 дней</option>
-                            <option value="90">90 дней</option>
-                            <option value="365">1 год</option>
-                        </select>
-                    </div>
-                    <button class="btn" onclick="generateUserKey()">🎫 Создать лицензию</button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <h3 class="panel-title">🔍 Проверка лицензии</h3>
-                <div class="form-group">
-                    <input type="text" id="checkKeyInput" class="form-input" placeholder="Введите лицензионный ключ">
-                </div>
-                <button class="btn" onclick="checkKey()">Проверить ключ</button>
-                <div id="checkResult" style="margin-top: 15px;"></div>
+        <!-- Панель выбора роли -->
+        <div class="auth-panel" id="roleSelection">
+            <h3>Выберите тип аккаунта:</h3>
+            <div class="role-buttons">
+                <button class="btn btn-vip" onclick="showLoginForm('admin')">👑 VIP АДМИН</button>
+                <button class="btn btn-user" onclick="showLoginForm('user')">👤 ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ</button>
             </div>
         </div>
 
-        <div id="keyResult" class="key-display">
-            <h3>✅ Лицензия создана!</h3>
-            <div class="key-text" id="generatedKey"></div>
-            <div id="keyDetails"></div>
-            <button class="btn" onclick="copyKey()">📋 Копировать ключ</button>
+        <!-- Форма входа для Админа -->
+        <div class="login-form" id="adminLoginForm">
+            <h3>👑 Вход для Администратора</h3>
+            <input type="email" id="adminEmail" class="form-input" placeholder="VIP Email" value="admin@armffsoft.com">
+            <input type="password" id="adminPassword" class="form-input" placeholder="VIP Пароль" value="armffsoft2024">
+            <button class="btn btn-vip" onclick="loginAdmin()">🚀 Войти как Админ</button>
         </div>
 
-        <div class="panel">
-            <h3 class="panel-title">📊 Активные лицензии</h3>
-            <div id="usersList" class="users-grid"></div>
+        <!-- Форма входа для пользователя -->
+        <div class="login-form" id="userLoginForm">
+            <h3>👤 Вход для Пользователя</h3>
+            <input type="email" id="userEmail" class="form-input" placeholder="Ваш email">
+            <input type="password" id="userPassword" class="form-input" placeholder="Ваш пароль">
+            <button class="btn btn-user" onclick="loginUser()">Войти</button>
+            <button class="btn" onclick="showRegisterForm()">📝 Регистрация</button>
+        </div>
+
+        <!-- Форма регистрации -->
+        <div class="login-form" id="registerForm">
+            <h3>📝 Регистрация нового пользователя</h3>
+            <input type="text" id="regName" class="form-input" placeholder="Ваше имя">
+            <input type="email" id="regEmail" class="form-input" placeholder="Email">
+            <input type="password" id="regPassword" class="form-input" placeholder="Пароль">
+            <input type="text" id="regTelegram" class="form-input" placeholder="Telegram (@username)">
+            <button class="btn" onclick="registerUser()">✅ Зарегистрироваться</button>
+        </div>
+
+        <!-- Панель Администратора -->
+        <div class="admin-panel" id="adminPanel">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2>👑 ПАНЕЛЬ АДМИНИСТРАТОРА <span class="vip-badge">VIP</span></h2>
+                <button class="btn" onclick="logout()">🚪 Выйти</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 10px;">
+                    <h3>🎫 Создать лицензию</h3>
+                    <input type="text" id="userName" class="form-input" placeholder="Имя клиента">
+                    <input type="email" id="userEmail" class="form-input" placeholder="Email клиента">
+                    <input type="text" id="userTelegram" class="form-input" placeholder="Telegram">
+                    <select id="daysValid" class="form-input">
+                        <option value="7">7 дней</option>
+                        <option value="30" selected>30 дней</option>
+                        <option value="90">90 дней</option>
+                        <option value="365">1 год</option>
+                    </select>
+                    <button class="btn btn-vip" onclick="generateUserKey()">Создать лицензию</button>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 10px;">
+                    <h3>🔍 Проверка ключа</h3>
+                    <input type="text" id="checkKeyInput" class="form-input" placeholder="Ключ для проверки">
+                    <button class="btn" onclick="checkKey()">Проверить</button>
+                    <div id="checkResult" style="margin-top: 15px;"></div>
+                </div>
+            </div>
+
+            <div id="keyResult" style="background: rgba(0,0,0,0.3); border: 2px solid #27ae60; border-radius: 10px; padding: 20px; margin: 20px 0; display: none;">
+                <h3>✅ Лицензия создана!</h3>
+                <div style="font-size: 1.5em; color: #27ae60; margin: 10px 0;" id="generatedKey"></div>
+                <div id="keyDetails"></div>
+                <button class="btn" onclick="copyKey()">📋 Копировать ключ</button>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 10px;">
+                <h3>📊 Все пользователи</h3>
+                <div id="usersList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <!-- Панель Пользователя -->
+        <div class="user-panel" id="userPanel">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2>👤 ЛИЧНЫЙ КАБИНЕТ</h2>
+                <button class="btn" onclick="logout()">🚪 Выйти</button>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 10px; text-align: center;">
+                <h3>🔑 Ваши лицензии</h3>
+                <div id="userLicenses"></div>
+            </div>
         </div>
     </div>
 
     <script>
-        // ТВОЙ Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyAOPcJlGZs_K88PoS2G8PW8eir-kD_LzYE",
             authDomain: "armffsoft-keys.firebaseapp.com",
@@ -216,23 +209,87 @@
             appId: "1:577466829018:web:cda9e4d2f673204dcbfde3"
         };
 
-        // Инициализация Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        
-        // Пароль администратора (можешь поменять)
-        const ADMIN_PASSWORD = "armffsoft2024";
+        const auth = firebase.auth();
 
-        function loginAdmin() {
-            const password = document.getElementById('adminPassword').value;
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('adminPanel').style.display = 'block';
-                loadUsers();
-                alert('Админ-панель активирована!');
+        // VIP Админ аккаунт
+        const VIP_ADMIN = {
+            email: "admin@armffsoft.com",
+            password: "armffsoft2024"
+        };
+
+        function showLoginForm(role) {
+            document.getElementById('roleSelection').style.display = 'none';
+            if (role === 'admin') {
+                document.getElementById('adminLoginForm').style.display = 'block';
             } else {
-                alert('Неверный пароль!');
+                document.getElementById('userLoginForm').style.display = 'block';
             }
         }
+
+        function showRegisterForm() {
+            document.getElementById('userLoginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function loginAdmin() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+
+            if (email === VIP_ADMIN.email && password === VIP_ADMIN.password) {
+                document.getElementById('adminLoginForm').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadUsers();
+                alert('Добро пожаловать, Администратор! 👑');
+            } else {
+                alert('Неверные VIP данные!');
+            }
+        }
+
+        async function registerUser() {
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const name = document.getElementById('regName').value;
+            const telegram = document.getElementById('regTelegram').value;
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                await db.collection("users").doc(userCredential.user.uid).set({
+                    name: name,
+                    email: email,
+                    telegram: telegram,
+                    role: "user",
+                    createdAt: new Date()
+                });
+                alert('Регистрация успешна!');
+                showLoginForm('user');
+            } catch (error) {
+                alert('Ошибка регистрации: ' + error.message);
+            }
+        }
+
+        async function loginUser() {
+            const email = document.getElementById('userEmail').value;
+            const password = document.getElementById('userPassword').value;
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                document.getElementById('userLoginForm').style.display = 'none';
+                document.getElementById('userPanel').style.display = 'block';
+                loadUserLicenses();
+            } catch (error) {
+                alert('Ошибка входа: ' + error.message);
+            }
+        }
+
+        function logout() {
+            auth.signOut();
+            location.reload();
+        }
+
+        // Остальные функции (generateUserKey, loadUsers, checkKey) остаются как были
+        // Добавь их из предыдущего кода
 
         function generateUserKey() {
             const name = document.getElementById('userName').value;
@@ -245,9 +302,7 @@
                 return;
             }
 
-            // Генерация уникального ключа
-            const key = "ARMFFSOFT-" + 
-                       Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
+            const key = "ARMFFSOFT-" + Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
                        Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
                        Math.random().toString(36).substr(2, 6).toUpperCase();
 
@@ -255,7 +310,6 @@
             const expires = new Date();
             expires.setDate(expires.getDate() + days);
 
-            // Сохранение в базу
             db.collection("licenses").add({
                 name: name,
                 email: email,
@@ -263,20 +317,19 @@
                 key: key,
                 created: firebase.firestore.Timestamp.fromDate(created),
                 expires: firebase.firestore.Timestamp.fromDate(expires),
-                status: "active"
+                status: "active",
+                createdBy: "admin"
             })
             .then(() => {
                 document.getElementById('generatedKey').textContent = key;
                 document.getElementById('keyDetails').innerHTML = `
                     <p><strong>Клиент:</strong> ${name}</p>
                     <p><strong>Email:</strong> ${email}</p>
-                    <p><strong>Telegram:</strong> ${telegram || 'Не указан'}</p>
                     <p><strong>Срок:</strong> ${days} дней</p>
                     <p><strong>Истекает:</strong> ${expires.toLocaleDateString('ru-RU')}</p>
                 `;
                 document.getElementById('keyResult').style.display = 'block';
                 loadUsers();
-                alert('Лицензия создана!');
             })
             .catch(error => {
                 alert('Ошибка: ' + error.message);
@@ -287,7 +340,6 @@
             db.collection("licenses").orderBy("created", "desc").get().then((querySnapshot) => {
                 const container = document.getElementById('usersList');
                 container.innerHTML = '';
-                
                 querySnapshot.forEach((doc) => {
                     const user = doc.data();
                     const expires = user.expires.toDate();
@@ -295,31 +347,57 @@
                     const isActive = now < expires && user.status === "active";
                     
                     const userCard = document.createElement('div');
-                    userCard.className = 'user-card';
+                    userCard.style.background = 'rgba(255,255,255,0.05)';
+                    userCard.style.padding = '15px';
+                    userCard.style.borderRadius = '8px';
                     userCard.innerHTML = `
-                        <strong>${user.name}</strong>
-                        <div style="font-size: 0.9em; margin: 5px 0;">
-                            ${user.email}<br>
-                            <code style="background: rgba(0,0,0,0.3); padding: 2px 5px; border-radius: 3px;">${user.key}</code>
-                        </div>
-                        <div class="${isActive ? 'status-active' : 'status-expired'}">
+                        <strong>${user.name}</strong><br>
+                        ${user.email}<br>
+                        <code>${user.key}</code><br>
+                        <span style="color: ${isActive ? '#27ae60' : '#e74c3c'}">
                             ${isActive ? '✅ Активен' : '❌ Истек'} до ${expires.toLocaleDateString('ru-RU')}
-                        </div>
+                        </span>
                     `;
                     container.appendChild(userCard);
                 });
             });
         }
 
+        function loadUserLicenses() {
+            const user = auth.currentUser;
+            if (user) {
+                db.collection("licenses").where("email", "==", user.email).get().then((querySnapshot) => {
+                    const container = document.getElementById('userLicenses');
+                    container.innerHTML = '';
+                    
+                    if (querySnapshot.empty) {
+                        container.innerHTML = '<p>У вас нет активных лицензий</p>';
+                    } else {
+                        querySnapshot.forEach((doc) => {
+                            const license = doc.data();
+                            const expires = license.expires.toDate();
+                            const now = new Date();
+                            const isActive = now < expires && license.status === "active";
+                            
+                            container.innerHTML += `
+                                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                    <strong>Лицензионный ключ:</strong><br>
+                                    <code style="font-size: 1.2em;">${license.key}</code><br>
+                                    <span style="color: ${isActive ? '#27ae60' : '#e74c3c'}">
+                                        ${isActive ? '✅ Активна' : '❌ Истекла'} до ${expires.toLocaleDateString('ru-RU')}
+                                    </span>
+                                </div>
+                            `;
+                        });
+                    }
+                });
+            }
+        }
+
         function checkKey() {
             const key = document.getElementById('checkKeyInput').value.trim();
             const resultDiv = document.getElementById('checkResult');
             
-            if (!key) {
-                resultDiv.innerHTML = '<div style="color: #e74c3c;">Введите ключ для проверки</div>';
-                return;
-            }
-
             db.collection("licenses").where("key", "==", key).get()
             .then((querySnapshot) => {
                 if (querySnapshot.empty) {
@@ -336,9 +414,7 @@
                                 <div style="color: #27ae60;">
                                     <h4>✅ Лицензия действительна</h4>
                                     <p><strong>Владелец:</strong> ${license.name}</p>
-                                    <p><strong>Email:</strong> ${license.email}</p>
                                     <p><strong>Истекает:</strong> ${expires.toLocaleDateString('ru-RU')}</p>
-                                    <p><strong>Осталось дней:</strong> ${Math.ceil((expires - now) / (1000 * 60 * 60 * 24))}</p>
                                 </div>
                             `;
                         } else {
@@ -352,23 +428,19 @@
                         }
                     });
                 }
-            })
-            .catch((error) => {
-                resultDiv.innerHTML = `<div style="color: #e74c3c;">Ошибка проверки: ${error.message}</div>`;
             });
         }
 
         function copyKey() {
             const key = document.getElementById('generatedKey').textContent;
             navigator.clipboard.writeText(key).then(() => {
-                alert('Ключ скопирован в буфер!');
+                alert('Ключ скопирован!');
             });
         }
 
-        // Автозагрузка при открытии
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('ARMFFSOFT Key Manager loaded');
-        });
+        // Автовход для админа (для удобства)
+        document.getElementById('adminEmail').value = VIP_ADMIN.email;
+        document.getElementById('adminPassword').value = VIP_ADMIN.password;
     </script>
 </body>
 </html>
