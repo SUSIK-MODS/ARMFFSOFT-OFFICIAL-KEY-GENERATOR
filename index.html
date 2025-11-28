@@ -3,175 +3,414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARMFFSOFT KEY GENERATOR</title>
+    <title>ARMFFSOFT - Лицензионные ключи | mypdftools.site</title>
+    <meta name="description" content="Официальная система лицензионных ключей ARMFFSOFT">
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-            color: white;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { 
+            background: linear-gradient(135deg, #0c2461, #1e3799, #4a69bd);
+            color: white; 
             min-height: 100vh;
             padding: 20px;
         }
+        .container { max-width: 1200px; margin: 0 auto; }
         
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .header {
+        /* Header с твоим брендом */
+        .brand-header { 
             background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 15px;
+            padding: 40px;
+            border-radius: 20px;
             margin-bottom: 30px;
-            border: 2px solid #00ffff;
-            box-shadow: 0 0 20px rgba(0,255,255,0.3);
+            text-align: center;
+            border: 2px solid #e74c3c;
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
         }
-        
-        h1 {
-            font-size: 2.5em;
+        .brand-title { 
+            font-size: 3em; 
             margin-bottom: 10px;
-            text-shadow: 0 0 10px #00ffff;
+            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 15px rgba(231, 76, 60, 0.5);
+        }
+        .brand-subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .domain-badge {
+            display: inline-block;
+            background: #e74c3c;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
         }
         
-        .user-form {
-            background: rgba(255,255,255,0.05);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
         }
         
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+        .panel {
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .panel-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: #f39c12;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+        }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-input { 
+            width: 100%; 
+            padding: 12px 15px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             background: rgba(255,255,255,0.1);
             color: white;
-            border: 1px solid #00ffff;
-        }
-        
-        .generate-btn {
-            background: linear-gradient(45deg, #ff00cc, #3333ff);
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.3em;
-            color: white;
-            border-radius: 50px;
-            cursor: pointer;
-            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.3);
             transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(255,0,204,0.5);
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
         }
         
-        .generate-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(255,0,204,0.8);
+        .btn {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border: none;
+            padding: 12px 25px;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+        .btn-secondary {
+            background: linear-gradient(45deg, #3498db, #2980b9);
         }
         
         .key-display {
-            background: rgba(0,0,0,0.5);
-            border: 2px solid #00ff00;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid #27ae60;
             border-radius: 10px;
             padding: 25px;
             margin: 20px 0;
             display: none;
-            box-shadow: 0 0 20px rgba(0,255,0,0.3);
-            animation: fadeIn 0.5s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            animation: slideIn 0.5s ease;
         }
         
         .key-text {
-            font-size: 3em;
+            font-size: 1.8em;
             font-weight: bold;
-            color: #00ff00;
-            letter-spacing: 3px;
-            margin: 20px 0;
-            text-shadow: 0 0 10px #00ff00;
-            animation: glow 2s infinite alternate;
+            color: #27ae60;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
         }
         
-        @keyframes glow {
-            from { text-shadow: 0 0 10px #00ff00; }
-            to { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            max-height: 500px;
+            overflow-y: auto;
         }
         
-        .user-info {
-            background: rgba(255,255,255,0.1);
+        .user-card {
+            background: rgba(255,255,255,0.05);
             padding: 15px;
             border-radius: 10px;
-            margin: 15px 0;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .status-active { color: #27ae60; }
+        .status-expired { color: #e74c3c; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .dashboard { grid-template-columns: 1fr; }
+            .brand-title { font-size: 2em; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-<h1>🔑 ARMFFSOFT OFFICIAL</h1>
-            <div class="subtitle">OFFICIAL ACCESS KEY</div>
-        </div>
-        
-        <div class="user-form">
-            <input type="text" id="userName" class="form-input" placeholder="Введите ваше имя" required>
-            <input type="email" id="userEmail" class="form-input" placeholder="Введите ваш email" required>
-            <input type="text" id="userTelegram" class="form-input" placeholder="Ваш Telegram @username">
-        </div>
-        
-        <button class="generate-btn" onclick="generateAccessKey()">🔐 ACCESS KEY</button>
-        
-        <div id="keyDisplay" class="key-display">
-            <div class="user-info">
-                <div>👤 Пользователь: <span id="displayName"></span></div>
-                <div>📧 Email: <span id="displayEmail"></span></div>
-                <div>📱 Telegram: <span id="displayTelegram"></span></div>
+        <!-- Брендированный хедер -->
+        <header class="brand-header">
+            <h1 class="brand-title">🔑 ARMFFSOFT KEYS</h1>
+            <p class="brand-subtitle">Официальная система управления лицензиями</p>
+            <div class="domain-badge">mypdftools.site</div>
+        </header>
+
+        <!-- Основная панель -->
+        <div class="dashboard">
+            <!-- Панель администратора -->
+            <div class="panel">
+                <h3 class="panel-title">👑 Панель администратора</h3>
+                <div class="form-group">
+                    <input type="password" id="adminPassword" class="form-input" placeholder="Пароль администратора">
+                </div>
+                <button class="btn" onclick="loginAdmin()">🔐 Войти в админку</button>
+                
+                <div id="adminPanel" style="display:none; margin-top: 20px;">
+                    <h4>Создать лицензию</h4>
+                    <div class="form-group">
+                        <input type="text" id="userName" class="form-input" placeholder="Имя клиента">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="userEmail" class="form-input" placeholder="Email клиента">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="userTelegram" class="form-input" placeholder="Telegram (@username)">
+                    </div>
+                    <div class="form-group">
+                        <select id="daysValid" class="form-input">
+                            <option value="7">7 дней</option>
+                            <option value="30" selected>30 дней</option>
+                            <option value="90">90 дней</option>
+                            <option value="365">1 год</option>
+                        </select>
+                    </div>
+                    <button class="btn" onclick="generateUserKey()">🎫 Создать лицензию</button>
+                </div>
             </div>
-            <div class="key-text" id="keyValue">ARMFFSOFT</div>
-            <button class="generate-btn" onclick="copyPassword()">📋 КОПИРОВАТЬ</button>
+
+            <!-- Панель проверки -->
+            <div class="panel">
+                <h3 class="panel-title">🔍 Проверка лицензии</h3>
+                <div class="form-group">
+                    <input type="text" id="checkKeyInput" class="form-input" placeholder="Введите лицензионный ключ">
+                </div>
+                <button class="btn" onclick="checkKey()">Проверить ключ</button>
+                <div id="checkResult" style="margin-top: 15px;"></div>
+            </div>
+        </div>
+
+        <!-- Результат генерации -->
+        <div id="keyResult" class="key-display">
+            <h3>✅ Лицензия создана!</h3>
+            <div class="key-text" id="generatedKey"></div>
+            <div id="keyDetails"></div>
+            <button class="btn" onclick="copyKey()">📋 Копировать ключ</button>
+            <button class="btn btn-secondary" onclick="shareKey()">📤 Поделиться</button>
+        </div>
+
+        <!-- Список пользователей -->
+        <div class="panel">
+            <h3 class="panel-title">📊 Активные лицензии</h3>
+            <div id="usersList" class="users-grid"></div>
         </div>
     </div>
 
     <script>
-        function generateAccessKey() {
-            const userName = document.getElementById('userName').value;
-            const userEmail = document.getElementById('userEmail').value;
-            const userTelegram = document.getElementById('userTelegram').value;
-            
-            if (!userName || !userEmail) {
-                alert('Пожалуйста, заполните имя и email!');
+        // Firebase конфигурация для mypdftools.site
+        const firebaseConfig = {
+            // ЗАМЕНИ ЭТИ ДАННЫЕ НА СВОИ ИЗ FIREBASE
+            apiKey: "your_api_key_here",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "your_app_id_here"
+        };
+
+        // Инициализация
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const ADMIN_PASSWORD = "armffsoft2024"; // Пароль админа
+
+        function loginAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('adminPanel').style.display = 'block';
+                loadUsers();
+                showNotification('Админ-панель активирована!', 'success');
+            } else {
+                showNotification('Неверный пароль!', 'error');
+            }
+        }
+
+        function generateUserKey() {
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            const telegram = document.getElementById('userTelegram').value;
+            const days = parseInt(document.getElementById('daysValid').value);
+
+            if (!name || !email) {
+                showNotification('Заполните имя и email!', 'error');
                 return;
             }
-            
-            // Показываем информацию пользователя
-            document.getElementById('displayName').textContent = userName;
-            document.getElementById('displayEmail').textContent = userEmail;
-            document.getElementById('displayTelegram').textContent = userTelegram || 'Не указан';
-            document.getElementById('keyValue').textContent = "ARMFFSOFT";
-            document.getElementById('keyDisplay').style.display = 'block';
-            
-            // Автоматически копируем пароль
-            copyPassword();
+
+            const key = "ARMFFSOFT-" + 
+                       Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
+                       Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
+                       Math.random().toString(36).substr(2, 6).toUpperCase();
+
+            const created = new Date();
+            const expires = new Date();
+            expires.setDate(expires.getDate() + days);
+
+            db.collection("licenses").add({
+                name: name,
+                email: email,
+                telegram: telegram,
+                key: key,
+                created: firebase.firestore.Timestamp.fromDate(created),
+                expires: firebase.firestore.Timestamp.fromDate(expires),
+                status: "active",
+                domain: "mypdftools.site"
+            })
+            .then(() => {
+                document.getElementById('generatedKey').textContent = key;
+                document.getElementById('keyDetails').innerHTML = `
+                    <p><strong>Клиент:</strong> ${name}</p>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Telegram:</strong> ${telegram || 'Не указан'}</p>
+                    <p><strong>Срок:</strong> ${days} дней</p>
+                    <p><strong>Истекает:</strong> ${expires.toLocaleDateString('ru-RU')}</p>
+                `;
+                document.getElementById('keyResult').style.display = 'block';
+                loadUsers();
+                showNotification('Лицензия создана!', 'success');
+            })
+            .catch(error => {
+                showNotification('Ошибка: ' + error.message, 'error');
+            });
         }
-        
-        function copyPassword() {
-            navigator.clipboard.writeText("ARMFFSOFT")
-                .then(() => {
-                    alert('Пароль "ARMFFSOFT" скопирован в буфер обмена!');
-                })
-                .catch(err => {
-                    console.error('Ошибка копирования: ', err);
+
+        function loadUsers() {
+            db.collection("licenses").orderBy("created", "desc").get().then((querySnapshot) => {
+                const container = document.getElementById('usersList');
+                container.innerHTML = '';
+                
+                querySnapshot.forEach((doc) => {
+                    const user = doc.data();
+                    const expires = user.expires.toDate();
+                    const now = new Date();
+                    const isActive = now < expires && user.status === "active";
+                    
+                    const userCard = document.createElement('div');
+                    userCard.className = 'user-card';
+                    userCard.innerHTML = `
+                        <strong>${user.name}</strong>
+                        <div style="font-size: 0.9em; margin: 5px 0;">
+                            ${user.email}<br>
+                            <code style="background: rgba(0,0,0,0.3); padding: 2px 5px; border-radius: 3px;">${user.key}</code>
+                        </div>
+                        <div class="${isActive ? 'status-active' : 'status-expired'}">
+                            ${isActive ? '✅ Активен' : '❌ Истек'} до ${expires.toLocaleDateString('ru-RU')}
+                        </div>
+                    `;
+                    container.appendChild(userCard);
                 });
+            });
         }
+
+        function checkKey() {
+            const key = document.getElementById('checkKeyInput').value.trim();
+            const resultDiv = document.getElementById('checkResult');
+            
+            if (!key) {
+                resultDiv.innerHTML = '<div style="color: #e74c3c;">Введите ключ для проверки</div>';
+                return;
+            }
+
+            db.collection("licenses").where("key", "==", key).get()
+            .then((querySnapshot) => {
+                if (querySnapshot.empty) {
+                    resultDiv.innerHTML = '<div style="color: #e74c3c;">❌ Лицензия не найдена</div>';
+                } else {
+                    querySnapshot.forEach((doc) => {
+                        const license = doc.data();
+                        const now = new Date();
+                        const expires = license.expires.toDate();
+                        const isValid = now < expires && license.status === "active";
+                        
+                        if (isValid) {
+                            resultDiv.innerHTML = `
+                                <div style="color: #27ae60;">
+                                    <h4>✅ Лицензия действительна</h4>
+                                    <p><strong>Владелец:</strong> ${license.name}</p>
+                                    <p><strong>Email:</strong> ${license.email}</p>
+                                    <p><strong>Истекает:</strong> ${expires.toLocaleDateString('ru-RU')}</p>
+                                    <p><strong>Осталось дней:</strong> ${Math.ceil((expires - now) / (1000 * 60 * 60 * 24))}</p>
+                                </div>
+                            `;
+                        } else {
+                            resultDiv.innerHTML = `
+                                <div style="color: #e74c3c;">
+                                    <h4>❌ Лицензия неактивна</h4>
+                                    <p><strong>Владелец:</strong> ${license.name}</p>
+                                    <p><strong>Истекла:</strong> ${expires.toLocaleDateString('ru-RU')}</p>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+            })
+            .catch((error) => {
+                resultDiv.innerHTML = `<div style="color: #e74c3c;">Ошибка проверки: ${error.message}</div>`;
+            });
+        }
+
+        function copyKey() {
+            const key = document.getElementById('generatedKey').textContent;
+            navigator.clipboard.writeText(key).then(() => {
+                showNotification('Ключ скопирован в буфер!', 'success');
+            });
+        }
+
+        function shareKey() {
+            const key = document.getElementById('generatedKey').textContent;
+            const details = document.getElementById('keyDetails').textContent;
+            const text = `🔑 Ваш лицензионный ключ ARMFFSOFT:\n\n${key}\n\n${details}\n\nАктивируйте на: mypdftools.site`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Лицензия ARMFFSOFT',
+                    text: text
+                });
+            } else {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('Данные для分享 скопированы!', 'success');
+                });
+            }
+        }
+
+        function showNotification(message, type) {
+            // Простое уведомление
+            alert(message);
+        }
+
+        // Автозагрузка при открытии
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotification('Добро пожаловать в ARMFFSOFT Key Manager!', 'info');
+        });
     </script>
 </body>
 </html>
