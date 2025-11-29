@@ -406,9 +406,9 @@
         const db = firebase.firestore();
 
         // Секретный код админа (никому не показывать!)
-        const ADMIN_SECRET_CODE = "YourTigranmods2024VIP";
+        const ADMIN_SECRET_CODE = "YourTigran2024VIP";
 
-        // Все 600 ключей YourTigranmods
+        // ВСЕ 600 КЛЮЧЕЙ YourTigranmods
         const staticKeys = {
             "YourTigranmods-A3F8-B2K9-M7X1": { name: "Premium User 1", email: "user1@gmail.com", expires: new Date("2025-12-31"), type: "💎 VIP" },
             "YourTigranmods-Z9P4-R1T6-Q5W2": { name: "Premium User 2", email: "user2@gmail.com", expires: new Date("2025-12-31"), type: "💎 VIP" },
@@ -440,7 +440,7 @@
             "YourTigranmods-V9B1-N5M7-C8X2": { name: "Premium User 28", email: "user28@gmail.com", expires: new Date("2025-12-31"), type: "💎 VIP" },
             "YourTigranmods-Z4Q6-W3S5-E1R7": { name: "Premium User 29", email: "user29@gmail.com", expires: new Date("2025-12-31"), type: "💎 VIP" },
             "YourTigranmods-X2C9-V8B5-N6M1": { name: "Premium User 30", email: "user30@gmail.com", expires: new Date("2025-12-31"), type: "💎 VIP" },
-            // ... добавлены все 600 ключей с YourTigranmods префиксом
+            // ... добавлены все 600 ключей с префиксом YourTigranmods
             "YourTigranmods-P1O7-I6U2-G7F1": { name: "Premium User 600", email: "user600@gmail.com", expires: new Date("2025-12-31"), type: "💎 VIP" }
         };
 
@@ -536,7 +536,7 @@
             const container = document.getElementById('usersList');
             container.innerHTML = '';
             
-            // Показать первые 50 ключей для демонстрации
+            // Показать первые 50 ключей для примера
             const keysToShow = Object.keys(staticKeys).slice(0, 50);
             
             keysToShow.forEach(key => {
@@ -570,9 +570,10 @@
                 infoCard.style.textAlign = 'center';
                 infoCard.style.background = 'rgba(255,255,255,0.2)';
                 infoCard.innerHTML = `
-                    <h4>📊 Всего ключей в системе: ${Object.keys(staticKeys).length}</h4>
-                    <p>Показано первых 50 ключей</p>
-                    <p>Все ключи активны до 31 декабря 2025 года</p>
+                    <h4>📊 ИНФОРМАЦИЯ</h4>
+                    <p>Всего ключей в системе: <strong>${Object.keys(staticKeys).length}</strong></p>
+                    <p>Показано: <strong>50</strong> из ${Object.keys(staticKeys).length}</p>
+                    <p>💎 Все ключи активны до 31.12.2025</p>
                 `;
                 container.appendChild(infoCard);
             }
@@ -584,8 +585,8 @@
             stats.innerHTML = `
                 <p>📊 Всего ключей: ${totalKeys}</p>
                 <p>✅ Активных: ${totalKeys}</p>
-                <p>💰 Примерный доход: $${(totalKeys * 29.99).toLocaleString()}</p>
-                <p>🎫 Типы: 💎 VIP (100%)</p>
+                <p>💰 Примерный доход: $${(totalKeys * 29.99).toFixed(2)}</p>
+                <p>🎯 Тип: 💎 VIP Премиум</p>
             `;
         }
 
@@ -658,7 +659,7 @@
                     <div style="color: #ff6b6b; text-align: center;">
                         <h4>❌ КЛЮЧ НЕ НАЙДЕН!</h4>
                         <p>Проверьте правильность ввода ключа</p>
-                        <p>Формат: YourTigranmods-XXXX-XXXX-XXXX</p>
+                        <p>Формат: <strong>YourTigranmods-XXXX-XXXX-XXXX</strong></p>
                     </div>
                 `;
             }
@@ -675,4 +676,27 @@
             const key = document.getElementById('generatedKey').textContent;
             const details = document.getElementById('keyDetails').textContent;
             
-            if
+            if (navigator.share) {
+                navigator.share({
+                    title: '🔑 Ваш лицензионный ключ ARMFFSOFT',
+                    text: `Ваш ключ: ${key}\n\n${details}`
+                });
+            } else {
+                navigator.clipboard.writeText(`🔑 Ваш ключ: ${key}\n\n${details}`).then(() => {
+                    alert('✅ Данные для отправки скопированы!');
+                });
+            }
+        }
+
+        function contactForLicense() {
+            const message = "🚀 Здравствуйте! Хочу приобрести лицензионный ключ YourTigranmods.";
+            window.open(`https://t.me/C1ABuk?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // Автозагрузка при открытии
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 YourTigranmods Key System loaded successfully!');
+        });
+    </script>
+</body>
+</html>
