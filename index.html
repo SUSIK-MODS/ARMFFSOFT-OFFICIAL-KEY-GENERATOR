@@ -3,203 +3,395 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARMFFSOFT - Лицензионные ключи | mypdftools.site</title>
+    <title>ARMFFSOFT - Official License System</title>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { 
-            background: linear-gradient(135deg, #0c2461, #1e3799, #4a69bd);
-            color: white; 
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        
+        body {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
             min-height: 100vh;
             padding: 20px;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
         
-        .brand-header { 
-            background: rgba(255,255,255,0.1);
-            padding: 40px;
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.3);
             border-radius: 20px;
             margin-bottom: 30px;
-            text-align: center;
-            border: 2px solid #e74c3c;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        .brand-title { 
-            font-size: 3em; 
+        
+        .title {
+            font-size: 3.5em;
             margin-bottom: 10px;
-            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0000ff, #8000ff);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow 3s ease infinite;
+            text-shadow: 0 0 30px rgba(255,255,255,0.5);
+        }
+        
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .panels-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .panel {
+            background: rgba(0,0,0,0.4);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .panel:hover {
+            transform: translateY(-5px);
+        }
+        
+        .panel-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         
-        .auth-panel {
-            background: rgba(255,255,255,0.08);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            text-align: center;
+        .form-group { margin-bottom: 20px; }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1.1em;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
         }
         
-        .role-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 20px 0;
+        .form-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0,255,255,0.5);
+            background: rgba(255,255,255,0.15);
         }
         
         .btn {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            background: linear-gradient(45deg, #ff0080, #8000ff);
             border: none;
-            padding: 12px 25px;
+            padding: 15px 30px;
             color: white;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
+            font-size: 1.2em;
             font-weight: bold;
             transition: all 0.3s ease;
+            margin: 10px 5px;
+            box-shadow: 0 5px 15px rgba(255,0,128,0.4);
         }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,0,128,0.6);
+        }
+        
         .btn-vip {
-            background: linear-gradient(45deg, #f39c12, #e67e22);
-        }
-        .btn-user {
-            background: linear-gradient(45deg, #3498db, #2980b9);
+            background: linear-gradient(45deg, #ffd700, #ff6b00);
         }
         
-        .login-form {
-            background: rgba(255,255,255,0.05);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-            display: none;
-        }
-        
-        .form-input { 
-            width: 100%; 
-            padding: 12px 15px;
+        .btn-social {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            padding: 12px 20px;
+            font-size: 1em;
+            display: block;
+            width: 100%;
             margin: 10px 0;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.3);
+            text-decoration: none;
+            text-align: center;
         }
         
-        .user-panel, .admin-panel {
+        .social-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .key-display {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
             display: none;
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(0,255,0,0.5); }
+            to { box-shadow: 0 0 40px rgba(0,255,0,0.8); }
+        }
+        
+        .key-text {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00ff00;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+        
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .user-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #ff0080;
+            transition: transform 0.3s ease;
+        }
+        
+        .user-card:hover {
+            transform: scale(1.02);
         }
         
         .vip-badge {
-            background: linear-gradient(45deg, #f39c12, #e67e22);
+            background: linear-gradient(45deg, #ffd700, #ff6b00);
             padding: 5px 15px;
             border-radius: 20px;
             font-size: 0.9em;
+            font-weight: bold;
             margin-left: 10px;
+        }
+        
+        .admin-panel, .user-panel {
+            display: none;
+        }
+        
+        .contact-panel {
+            grid-column: 1 / -1;
+            text-align: center;
+        }
+        
+        .creator-info {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .creator-title {
+            font-size: 2em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        @media (max-width: 768px) {
+            .panels-grid { grid-template-columns: 1fr; }
+            .title { font-size: 2.5em; }
+            .social-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="brand-header">
-            <h1 class="brand-title">🔑 ARMFFSOFT KEYS</h1>
-            <p>Официальная система управления лицензиями</p>
-            <div class="domain-badge">mypdftools.site</div>
+        <!-- Заголовок -->
+        <header class="header">
+            <h1 class="title">🔑 ARMFFSOFT KEYS</h1>
+            <p style="font-size: 1.3em; opacity: 0.9;">Official License Management System</p>
+            <div style="margin-top: 15px;">
+                <span style="background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px;">
+                    🚀 Premium Modding Services
+                </span>
+            </div>
         </header>
 
-        <!-- Панель выбора роли -->
-        <div class="auth-panel" id="roleSelection">
-            <h3>Выберите тип аккаунта:</h3>
-            <div class="role-buttons">
-                <button class="btn btn-vip" onclick="showLoginForm('admin')">👑 VIP АДМИН</button>
-                <button class="btn btn-user" onclick="showLoginForm('user')">👤 ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ</button>
+        <!-- Основные панели -->
+        <div class="panels-grid">
+            <!-- Панель выбора роли -->
+            <div class="panel">
+                <h3 class="panel-title">🎮 ВЫБЕРИТЕ РОЛЬ</h3>
+                <div style="text-align: center;">
+                    <button class="btn btn-vip" onclick="showAdminLogin()">👑 VIP АДМИН</button>
+                    <button class="btn" onclick="showUserPanel()">👤 ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ</button>
+                </div>
+                
+                <!-- Скрытая форма админа -->
+                <div id="adminLoginForm" style="display: none; margin-top: 20px;">
+                    <div class="form-group">
+                        <input type="password" id="adminPassword" class="form-input" placeholder="🔒 Введите секретный код доступа">
+                    </div>
+                    <button class="btn btn-vip" onclick="loginAdmin()">🚀 Войти в Админку</button>
+                </div>
             </div>
-        </div>
 
-        <!-- Форма входа для Админа -->
-        <div class="login-form" id="adminLoginForm">
-            <h3>👑 Вход для Администратора</h3>
-            <input type="email" id="adminEmail" class="form-input" placeholder="VIP Email" value="admin@armffsoft.com">
-            <input type="password" id="adminPassword" class="form-input" placeholder="VIP Пароль" value="armffsoft2024">
-            <button class="btn btn-vip" onclick="loginAdmin()">🚀 Войти как Админ</button>
-        </div>
+            <!-- Панель проверки ключа -->
+            <div class="panel">
+                <h3 class="panel-title">🔍 ПРОВЕРКА КЛЮЧА</h3>
+                <div class="form-group">
+                    <input type="text" id="checkKeyInput" class="form-input" placeholder="🔑 Введите лицензионный ключ">
+                </div>
+                <button class="btn" onclick="checkKey()">✅ Проверить ключ</button>
+                <div id="checkResult" style="margin-top: 20px; min-height: 50px;"></div>
+            </div>
 
-        <!-- Форма входа для пользователя -->
-        <div class="login-form" id="userLoginForm">
-            <h3>👤 Вход для Пользователя</h3>
-            <input type="email" id="userEmail" class="form-input" placeholder="Ваш email">
-            <input type="password" id="userPassword" class="form-input" placeholder="Ваш пароль">
-            <button class="btn btn-user" onclick="loginUser()">Войти</button>
-            <button class="btn" onclick="showRegisterForm()">📝 Регистрация</button>
-        </div>
+            <!-- Панель контактов -->
+            <div class="panel contact-panel">
+                <h3 class="panel-title">📞 КОНТАКТЫ И СОЦСЕТИ</h3>
+                
+                <div class="creator-info">
+                    <h4 class="creator-title">👨‍💻 ARMFFSOFT CREATOR</h4>
+                    <p>Профессиональный разработчик модов и взломов</p>
+                    <p>🚀 Качественные продукты | ⚡ Быстрая поддержка</p>
+                </div>
 
-        <!-- Форма регистрации -->
-        <div class="login-form" id="registerForm">
-            <h3>📝 Регистрация нового пользователя</h3>
-            <input type="text" id="regName" class="form-input" placeholder="Ваше имя">
-            <input type="email" id="regEmail" class="form-input" placeholder="Email">
-            <input type="password" id="regPassword" class="form-input" placeholder="Пароль">
-            <input type="text" id="regTelegram" class="form-input" placeholder="Telegram (@username)">
-            <button class="btn" onclick="registerUser()">✅ Зарегистрироваться</button>
+                <div class="social-grid">
+                    <a href="https://www.instagram.com/armffsoft?igsh=ZG9pZzBrd29nNzR3" class="btn btn-social" target="_blank">
+                        📷 INSTAGRAM
+                    </a>
+                    <a href="https://t.me/YourTigranmods" class="btn btn-social" target="_blank">
+                        📱 TELEGRAM CHANNEL
+                    </a>
+                    <a href="https://youtube.com/@speedmak01?si=UxM6ffQuM5ADLPvy" class="btn btn-social" target="_blank">
+                        🎥 YOUTUBE
+                    </a>
+                    <a href="https://t.me/C1ABuk" class="btn btn-social" target="_blank">
+                        💎 TELEGRAM ACCOUNT
+                    </a>
+                    <a href="https://wa.me/qr/IK2UVLTM2D6GB1" class="btn btn-social" target="_blank">
+                        💬 WHATSAPP
+                    </a>
+                    <a href="https://discord.com/channels/1431684170542747752/1431684171134271589" class="btn btn-social" target="_blank">
+                        🎮 DISCORD SERVER
+                    </a>
+                </div>
+            </div>
         </div>
 
         <!-- Панель Администратора -->
         <div class="admin-panel" id="adminPanel">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h2>👑 ПАНЕЛЬ АДМИНИСТРАТОРА <span class="vip-badge">VIP</span></h2>
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 2.5em;">
+                    👑 АДМИН ПАНЕЛЬ <span class="vip-badge">VIP</span>
+                </h2>
                 <button class="btn" onclick="logout()">🚪 Выйти</button>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 10px;">
-                    <h3>🎫 Создать лицензию</h3>
-                    <input type="text" id="userName" class="form-input" placeholder="Имя клиента">
-                    <input type="email" id="userEmail" class="form-input" placeholder="Email клиента">
-                    <input type="text" id="userTelegram" class="form-input" placeholder="Telegram">
-                    <select id="daysValid" class="form-input">
-                        <option value="7">7 дней</option>
-                        <option value="30" selected>30 дней</option>
-                        <option value="90">90 дней</option>
-                        <option value="365">1 год</option>
-                    </select>
-                    <button class="btn btn-vip" onclick="generateUserKey()">Создать лицензию</button>
+            <div class="panels-grid">
+                <div class="panel">
+                    <h3 class="panel-title">🎫 СОЗДАТЬ ЛИЦЕНЗИЮ</h3>
+                    <div class="form-group">
+                        <input type="text" id="userName" class="form-input" placeholder="👤 Имя клиента">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="userEmail" class="form-input" placeholder="📧 Email клиента">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="userTelegram" class="form-input" placeholder="💬 Telegram">
+                    </div>
+                    <div class="form-group">
+                        <select id="licenseType" class="form-input">
+                            <option value="7">🆓 Обычный ключ (7 дней)</option>
+                            <option value="30">⭐ Премиум ключ (30 дней)</option>
+                            <option value="90">💎 VIP ключ (90 дней)</option>
+                            <option value="365">👑 Пожизненный ключ (1 год)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-vip" onclick="generateLicense()">✨ Создать лицензию</button>
                 </div>
 
-                <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 10px;">
-                    <h3>🔍 Проверка ключа</h3>
-                    <input type="text" id="checkKeyInput" class="form-input" placeholder="Ключ для проверки">
-                    <button class="btn" onclick="checkKey()">Проверить</button>
-                    <div id="checkResult" style="margin-top: 15px;"></div>
+                <div class="panel">
+                    <h3 class="panel-title">📊 СТАТИСТИКА</h3>
+                    <div id="statsInfo" style="text-align: center; padding: 20px;">
+                        <p>🔄 Загрузка статистики...</p>
+                    </div>
                 </div>
             </div>
 
-            <div id="keyResult" style="background: rgba(0,0,0,0.3); border: 2px solid #27ae60; border-radius: 10px; padding: 20px; margin: 20px 0; display: none;">
-                <h3>✅ Лицензия создана!</h3>
-                <div style="font-size: 1.5em; color: #27ae60; margin: 10px 0;" id="generatedKey"></div>
-                <div id="keyDetails"></div>
-                <button class="btn" onclick="copyKey()">📋 Копировать ключ</button>
+            <!-- Результат создания ключа -->
+            <div id="keyResult" class="key-display">
+                <h3 style="text-align: center; color: #00ff00;">✅ ЛИЦЕНЗИЯ СОЗДАНА!</h3>
+                <div class="key-text" id="generatedKey"></div>
+                <div id="keyDetails" style="text-align: center; margin: 15px 0;"></div>
+                <div style="text-align: center;">
+                    <button class="btn" onclick="copyKey()">📋 Копировать ключ</button>
+                    <button class="btn btn-vip" onclick="shareKey()">📤 Поделиться</button>
+                </div>
             </div>
 
-            <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 10px;">
-                <h3>📊 Все пользователи</h3>
-                <div id="usersList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; margin-top: 15px;"></div>
+            <!-- Список пользователей -->
+            <div class="panel" style="grid-column: 1 / -1;">
+                <h3 class="panel-title">👥 ВСЕ ПОЛЬЗОВАТЕЛИ</h3>
+                <div id="usersList" class="users-grid"></div>
             </div>
         </div>
 
-        <!-- Панель Пользователя -->
+        <!-- Панель пользователя -->
         <div class="user-panel" id="userPanel">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h2>👤 ЛИЧНЫЙ КАБИНЕТ</h2>
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 2.5em;">👤 ЛИЧНЫЙ КАБИНЕТ</h2>
                 <button class="btn" onclick="logout()">🚪 Выйти</button>
             </div>
 
-            <div style="background: rgba(255,255,255,0.08); padding: 20px; border-radius: 10px; text-align: center;">
-                <h3>🔑 Ваши лицензии</h3>
-                <div id="userLicenses"></div>
+            <div class="panels-grid">
+                <div class="panel">
+                    <h3 class="panel-title">🔑 МОИ КЛЮЧИ</h3>
+                    <div id="userLicenses" style="text-align: center; padding: 20px;">
+                        <p>🔍 У вас пока нет активных лицензий</p>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3 class="panel-title">💳 КУПИТЬ КЛЮЧ</h3>
+                    <div style="text-align: center;">
+                        <p>🚀 Получите премиум доступ к модам!</p>
+                        <button class="btn btn-vip" onclick="contactForLicense()">💎 Связаться для покупки</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Firebase конфигурация
         const firebaseConfig = {
             apiKey: "AIzaSyAOPcJlGZs_K88PoS2G8PW8eir-kD_LzYE",
             authDomain: "armffsoft-keys.firebaseapp.com",
@@ -209,238 +401,248 @@
             appId: "1:577466829018:web:cda9e4d2f673204dcbfde3"
         };
 
+        // Инициализация Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const auth = firebase.auth();
 
-        // VIP Админ аккаунт
-        const VIP_ADMIN = {
-            email: "admin@armffsoft.com",
-            password: "armffsoft2024"
+        // Секретный код админа (никому не показывать!)
+        const ADMIN_SECRET_CODE = "ARMFFSOFT2024VIP";
+
+        // Статические ключи для демонстрации
+        const staticKeys = {
+            "ARMFFSOFT-DEMO-123456": { 
+                name: "Demo User", 
+                email: "demo@armffsoft.com",
+                expires: new Date("2025-12-31"),
+                type: "VIP"
+            },
+            "ARMFFSOFT-TEST-789012": { 
+                name: "Test User", 
+                email: "test@armffsoft.com",
+                expires: new Date("2024-12-31"),
+                type: "Premium"
+            }
         };
 
-        function showLoginForm(role) {
-            document.getElementById('roleSelection').style.display = 'none';
-            if (role === 'admin') {
-                document.getElementById('adminLoginForm').style.display = 'block';
-            } else {
-                document.getElementById('userLoginForm').style.display = 'block';
-            }
-        }
-
-        function showRegisterForm() {
-            document.getElementById('userLoginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'block';
+        function showAdminLogin() {
+            document.getElementById('adminLoginForm').style.display = 'block';
         }
 
         function loginAdmin() {
-            const email = document.getElementById('adminEmail').value;
             const password = document.getElementById('adminPassword').value;
-
-            if (email === VIP_ADMIN.email && password === VIP_ADMIN.password) {
-                document.getElementById('adminLoginForm').style.display = 'none';
+            
+            if (password === ADMIN_SECRET_CODE) {
                 document.getElementById('adminPanel').style.display = 'block';
                 loadUsers();
-                alert('Добро пожаловать, Администратор! 👑');
+                loadStats();
+                alert('👑 Добро пожаловать в Админ Панель!');
             } else {
-                alert('Неверные VIP данные!');
+                alert('❌ Неверный секретный код!');
             }
         }
 
-        async function registerUser() {
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            const name = document.getElementById('regName').value;
-            const telegram = document.getElementById('regTelegram').value;
-
-            try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                await db.collection("users").doc(userCredential.user.uid).set({
-                    name: name,
-                    email: email,
-                    telegram: telegram,
-                    role: "user",
-                    createdAt: new Date()
-                });
-                alert('Регистрация успешна!');
-                showLoginForm('user');
-            } catch (error) {
-                alert('Ошибка регистрации: ' + error.message);
-            }
-        }
-
-        async function loginUser() {
-            const email = document.getElementById('userEmail').value;
-            const password = document.getElementById('userPassword').value;
-
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
-                document.getElementById('userLoginForm').style.display = 'none';
-                document.getElementById('userPanel').style.display = 'block';
-                loadUserLicenses();
-            } catch (error) {
-                alert('Ошибка входа: ' + error.message);
-            }
+        function showUserPanel() {
+            document.getElementById('userPanel').style.display = 'block';
+            loadUserLicenses();
         }
 
         function logout() {
-            auth.signOut();
-            location.reload();
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('userPanel').style.display = 'none';
+            document.getElementById('adminLoginForm').style.display = 'none';
+            document.getElementById('keyResult').style.display = 'none';
+            document.getElementById('checkResult').innerHTML = '';
         }
 
-        // Остальные функции (generateUserKey, loadUsers, checkKey) остаются как были
-        // Добавь их из предыдущего кода
-
-        function generateUserKey() {
+        function generateLicense() {
             const name = document.getElementById('userName').value;
             const email = document.getElementById('userEmail').value;
             const telegram = document.getElementById('userTelegram').value;
-            const days = parseInt(document.getElementById('daysValid').value);
+            const days = parseInt(document.getElementById('licenseType').value);
 
             if (!name || !email) {
-                alert('Заполните имя и email!');
+                alert('❌ Заполните имя и email!');
                 return;
             }
 
-            const key = "ARMFFSOFT-" + Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
-                       Math.random().toString(36).substr(2, 6).toUpperCase() + "-" +
-                       Math.random().toString(36).substr(2, 6).toUpperCase();
+            // Генерация уникального ключа
+            const key = "ARMFFSOFT-" + 
+                       Math.random().toString(36).substr(2, 4).toUpperCase() + "-" +
+                       Math.random().toString(36).substr(2, 4).toUpperCase() + "-" +
+                       Math.random().toString(36).substr(2, 4).toUpperCase();
 
             const created = new Date();
             const expires = new Date();
             expires.setDate(expires.getDate() + days);
 
+            const licenseTypes = {
+                7: "🆓 Обычный",
+                30: "⭐ Премиум", 
+                90: "💎 VIP",
+                365: "👑 Пожизненный"
+            };
+
+            // Сохранение в базу
             db.collection("licenses").add({
                 name: name,
                 email: email,
                 telegram: telegram,
                 key: key,
+                type: licenseTypes[days],
                 created: firebase.firestore.Timestamp.fromDate(created),
                 expires: firebase.firestore.Timestamp.fromDate(expires),
-                status: "active",
-                createdBy: "admin"
+                status: "active"
             })
             .then(() => {
+                // Показать результат
                 document.getElementById('generatedKey').textContent = key;
                 document.getElementById('keyDetails').innerHTML = `
-                    <p><strong>Клиент:</strong> ${name}</p>
-                    <p><strong>Email:</strong> ${email}</p>
-                    <p><strong>Срок:</strong> ${days} дней</p>
-                    <p><strong>Истекает:</strong> ${expires.toLocaleDateString('ru-RU')}</p>
+                    <p><strong>👤 Клиент:</strong> ${name}</p>
+                    <p><strong>📧 Email:</strong> ${email}</p>
+                    <p><strong>💬 Telegram:</strong> ${telegram || 'Не указан'}</p>
+                    <p><strong>🎫 Тип:</strong> ${licenseTypes[days]}</p>
+                    <p><strong>📅 Истекает:</strong> ${expires.toLocaleDateString('ru-RU')}</p>
                 `;
                 document.getElementById('keyResult').style.display = 'block';
                 loadUsers();
+                loadStats();
             })
             .catch(error => {
-                alert('Ошибка: ' + error.message);
+                alert('❌ Ошибка: ' + error.message);
             });
         }
 
         function loadUsers() {
-            db.collection("licenses").orderBy("created", "desc").get().then((querySnapshot) => {
-                const container = document.getElementById('usersList');
-                container.innerHTML = '';
-                querySnapshot.forEach((doc) => {
-                    const user = doc.data();
-                    const expires = user.expires.toDate();
-                    const now = new Date();
-                    const isActive = now < expires && user.status === "active";
-                    
-                    const userCard = document.createElement('div');
-                    userCard.style.background = 'rgba(255,255,255,0.05)';
-                    userCard.style.padding = '15px';
-                    userCard.style.borderRadius = '8px';
-                    userCard.innerHTML = `
-                        <strong>${user.name}</strong><br>
-                        ${user.email}<br>
-                        <code>${user.key}</code><br>
-                        <span style="color: ${isActive ? '#27ae60' : '#e74c3c'}">
-                            ${isActive ? '✅ Активен' : '❌ Истек'} до ${expires.toLocaleDateString('ru-RU')}
-                        </span>
-                    `;
-                    container.appendChild(userCard);
-                });
+            // Для демо - используем статические данные
+            const container = document.getElementById('usersList');
+            container.innerHTML = '';
+            
+            Object.keys(staticKeys).forEach(key => {
+                const license = staticKeys[key];
+                const isActive = new Date() < license.expires;
+                
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+                userCard.innerHTML = `
+                    <strong>${license.name}</strong>
+                    <div style="margin: 10px 0;">
+                        <small>${license.email}</small><br>
+                        <code style="background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 5px; display: block; margin: 5px 0;">
+                            ${key}
+                        </code>
+                    </div>
+                    <div style="color: ${isActive ? '#00ff00' : '#ff0000'};">
+                        ${isActive ? '✅ Активен' : '❌ Истек'} до ${license.expires.toLocaleDateString('ru-RU')}
+                    </div>
+                    <div style="margin-top: 5px;">
+                        <small>Тип: ${license.type}</small>
+                    </div>
+                `;
+                container.appendChild(userCard);
             });
         }
 
+        function loadStats() {
+            const stats = document.getElementById('statsInfo');
+            stats.innerHTML = `
+                <p>📊 Всего ключей: ${Object.keys(staticKeys).length}</p>
+                <p>✅ Активных: ${Object.keys(staticKeys).length}</p>
+                <p>💰 Доход: $${Object.keys(staticKeys).length * 29.99}</p>
+            `;
+        }
+
         function loadUserLicenses() {
-            const user = auth.currentUser;
-            if (user) {
-                db.collection("licenses").where("email", "==", user.email).get().then((querySnapshot) => {
-                    const container = document.getElementById('userLicenses');
-                    container.innerHTML = '';
-                    
-                    if (querySnapshot.empty) {
-                        container.innerHTML = '<p>У вас нет активных лицензий</p>';
-                    } else {
-                        querySnapshot.forEach((doc) => {
-                            const license = doc.data();
-                            const expires = license.expires.toDate();
-                            const now = new Date();
-                            const isActive = now < expires && license.status === "active";
-                            
-                            container.innerHTML += `
-                                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin: 10px 0;">
-                                    <strong>Лицензионный ключ:</strong><br>
-                                    <code style="font-size: 1.2em;">${license.key}</code><br>
-                                    <span style="color: ${isActive ? '#27ae60' : '#e74c3c'}">
-                                        ${isActive ? '✅ Активна' : '❌ Истекла'} до ${expires.toLocaleDateString('ru-RU')}
-                                    </span>
-                                </div>
-                            `;
-                        });
-                    }
-                });
-            }
+            const container = document.getElementById('userLicenses');
+            container.innerHTML = '';
+            
+            // Показать демо ключи для пользователя
+            Object.keys(staticKeys).forEach(key => {
+                const license = staticKeys[key];
+                const isActive = new Date() < license.expires;
+                
+                container.innerHTML += `
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        <strong>🔑 ${key}</strong><br>
+                        <span style="color: ${isActive ? '#00ff00' : '#ff0000'}">
+                            ${isActive ? '✅ Активен' : '❌ Истек'} до ${license.expires.toLocaleDateString('ru-RU')}
+                        </span><br>
+                        <small>Тип: ${license.type}</small>
+                    </div>
+                `;
+            });
         }
 
         function checkKey() {
             const key = document.getElementById('checkKeyInput').value.trim();
             const resultDiv = document.getElementById('checkResult');
             
-            db.collection("licenses").where("key", "==", key).get()
-            .then((querySnapshot) => {
-                if (querySnapshot.empty) {
-                    resultDiv.innerHTML = '<div style="color: #e74c3c;">❌ Лицензия не найдена</div>';
+            if (!key) {
+                resultDiv.innerHTML = '<div style="color: #ff6b6b; text-align: center;">❌ Введите ключ для проверки</div>';
+                return;
+            }
+
+            // Проверка в статических ключах
+            if (staticKeys[key]) {
+                const license = staticKeys[key];
+                const now = new Date();
+                const isValid = now < license.expires;
+                
+                if (isValid) {
+                    resultDiv.innerHTML = `
+                        <div style="color: #00ff00; text-align: center;">
+                            <h4>✅ КЛЮЧ ДЕЙСТВИТЕЛЕН!</h4>
+                            <p><strong>Владелец:</strong> ${license.name}</p>
+                            <p><strong>Тип:</strong> ${license.type}</p>
+                            <p><strong>Истекает:</strong> ${license.expires.toLocaleDateString('ru-RU')}</p>
+                            <p><strong>Осталось дней:</strong> ${Math.ceil((license.expires - now) / (1000 * 60 * 60 * 24))}</p>
+                        </div>
+                    `;
                 } else {
-                    querySnapshot.forEach((doc) => {
-                        const license = doc.data();
-                        const now = new Date();
-                        const expires = license.expires.toDate();
-                        const isValid = now < expires && license.status === "active";
-                        
-                        if (isValid) {
-                            resultDiv.innerHTML = `
-                                <div style="color: #27ae60;">
-                                    <h4>✅ Лицензия действительна</h4>
-                                    <p><strong>Владелец:</strong> ${license.name}</p>
-                                    <p><strong>Истекает:</strong> ${expires.toLocaleDateString('ru-RU')}</p>
-                                </div>
-                            `;
-                        } else {
-                            resultDiv.innerHTML = `
-                                <div style="color: #e74c3c;">
-                                    <h4>❌ Лицензия неактивна</h4>
-                                    <p><strong>Владелец:</strong> ${license.name}</p>
-                                    <p><strong>Истекла:</strong> ${expires.toLocaleDateString('ru-RU')}</p>
-                                </div>
-                            `;
-                        }
-                    });
+                    resultDiv.innerHTML = `
+                        <div style="color: #ff6b6b; text-align: center;">
+                            <h4>❌ КЛЮЧ ИСТЕК!</h4>
+                            <p><strong>Владелец:</strong> ${license.name}</p>
+                            <p><strong>Истек:</strong> ${license.expires.toLocaleDateString('ru-RU')}</p>
+                        </div>
+                    `;
                 }
-            });
+            } else {
+                resultDiv.innerHTML = '<div style="color: #ff6b6b; text-align: center;">❌ КЛЮЧ НЕ НАЙДЕН!</div>';
+            }
         }
 
         function copyKey() {
             const key = document.getElementById('generatedKey').textContent;
             navigator.clipboard.writeText(key).then(() => {
-                alert('Ключ скопирован!');
+                alert('✅ Ключ скопирован в буфер обмена!');
             });
         }
 
-        // Автовход для админа (для удобства)
-        document.getElementById('adminEmail').value = VIP_ADMIN.email;
-        document.getElementById('adminPassword').value = VIP_ADMIN.password;
+        function shareKey() {
+            const key = document.getElementById('generatedKey').textContent;
+            const details = document.getElementById('keyDetails').textContent;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '🔑 Ваш лицензионный ключ ARMFFSOFT',
+                    text: `Ваш ключ: ${key}\n\n${details}`
+                });
+            } else {
+                navigator.clipboard.writeText(`🔑 Ваш ключ: ${key}\n\n${details}`).then(() => {
+                    alert('✅ Данные для отправки скопированы!');
+                });
+            }
+        }
+
+        function contactForLicense() {
+            const message = "🚀 Здравствуйте! Хочу приобрести лицензионный ключ ARMFFSOFT.";
+            window.open(`https://t.me/C1ABuk?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // Автозагрузка при открытии
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 ARMFFSOFT Key System loaded successfully!');
+        });
     </script>
 </body>
 </html>
